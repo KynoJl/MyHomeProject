@@ -1,1 +1,22 @@
+spring:
+  liquibase:
+    change-log: classpath:db/changelog.xml
+    default-schema: microservice_home_registry
+    liquibase-schema: microservice_home_registry
+    drop-first: true
 
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: true
+    open-in-view: false
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
