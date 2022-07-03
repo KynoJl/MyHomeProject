@@ -11,6 +11,19 @@ Content-Type: application/json
   "zipCode": "425060",
   "addressType": "FLAT"
 }
+###
+POST http://localhost:8080/address
+Content-Type: application/json
+
+{
+"country": "Russian Federation",
+"city": "Moscow",
+"streetName": "1-park",
+"buildingNumber": 25,
+"flatNumber": 11,
+"zipCode": "425060",
+"addressType": "BUILDING"
+}
 
 ###
 GET http://localhost:8080/address

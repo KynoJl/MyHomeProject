@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 class AddressMapper {
     fun toEntity(dto: AddressDto): Address =
         Address().apply {
+            id = dto.id?: error("is null")
             country = dto.country
             city = dto.city
             streetName = dto.streetName
