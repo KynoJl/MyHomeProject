@@ -6,7 +6,9 @@ import com.example.projecthome.mapper.AddressMapper
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertTimeout
 import java.io.IOException
+import java.time.Duration.ofMillis
 
 
 class DecoderTest {
@@ -14,12 +16,12 @@ class DecoderTest {
 
 
     @Test
-    fun shouldMapper() {
+    fun shouldMapperToEntity() {
         //задаём случайные параметры
         val addressDto:AddressDto = easyRandom()
 
         val result = mapper.toEntity(addressDto)
-        val result2 = mapper.toDto(result)
+
 
         // Проверяем после преобразования
         assertSoftly {
@@ -30,19 +32,10 @@ class DecoderTest {
             result.buildingNumber shouldBe addressDto.buildingNumber
             result.flatNumber shouldBe addressDto.flatNumber
             result.zipCode shouldBe addressDto.zipCode
-
+            println(result)
         }
 
-        assertSoftly {
-            result2.id shouldBe (addressDto.id)
-            result2.country shouldBe( addressDto.country)
-            result2.city shouldBe addressDto.city
-            result2.streetName shouldBe addressDto.streetName
-            result2.buildingNumber shouldBe addressDto.buildingNumber
-            result2.flatNumber shouldBe addressDto.flatNumber
-            result2.zipCode shouldBe addressDto.zipCode
 
-        }
 
         assert(result.id == addressDto.id)
         assert(result.country == addressDto.country)
@@ -52,5 +45,34 @@ class DecoderTest {
         assert(result.flatNumber == addressDto.flatNumber)
         assert(result.zipCode == addressDto.zipCode)
 
+
+    }
+    @Test
+    fun `Timeout not exceeded`() {
+        val addressDto:AddressDto = easyRandom()
+        // Тест упадёт после выполнения лямбда-выражения, если оно превысит 1000 мс
+        assertTimeout(ofMillis(1000)) {
+            print("Выполняется операция, которая займёт не больше 1 секунды")
+            mapper.toEntity(addressDto)
+        }
+    }
+    @Test
+    fun shouldMapperToDto() {
+        val addressDto:AddressDto = easyRandom()
+
+        val result = mapper.toEntity(addressDto)
+        val resultDto = mapper.toDto(result)
+
+        assertSoftly {
+            resultDto.id shouldBe (addressDto.id)
+            resultDto.country shouldBe( addressDto.country)
+            resultDto.city shouldBe addressDto.city
+            resultDto.streetName shouldBe addressDto.streetName
+            resultDto.buildingNumber shouldBe addressDto.buildingNumber
+            resultDto.flatNumber shouldBe addressDto.flatNumber
+            resultDto.zipCode shouldBe addressDto.zipCode
+            println(resultDto)
+
+        }
     }
 }
